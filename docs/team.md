@@ -1,16 +1,16 @@
 ---
 layout: default
-title:  Team
+title:  CS-175
 ---
 
 # {{ page.title }}
 
 
-## USER 1
-***UCI Net ID***: ucinetid
+## Jack Newcomb
+***UCI Net ID***: jmewcom
 
-## USER 2
-***UCI Net ID***: ucinetid
+## Keith Yuen
+***UCI Net ID***: klyuen
 
-## USER 3
+## Hector Vega
 ***UCI Net ID***: ucinetid
