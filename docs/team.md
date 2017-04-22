@@ -13,4 +13,4 @@ title:  CS-175
 ***UCI Net ID***: klyuen
 
 ## Hector Vega
-***UCI Net ID***: ucinetid
+***UCI Net ID***: hrvega
