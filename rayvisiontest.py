@@ -36,26 +36,49 @@ def create_level(mission, num_levels, level):
                     mission.drawBlock(x, y, z, "glowstone")
     return mission
 
+
 def run_agent(world_state, agent_host):
+    turn_rate = -.0002
+
+    obstacles = []
     while world_state.is_mission_running:
+
         sys.stdout.write(".")
-        agent_host.sendCommand("movesouth 1")
         time.sleep(0.1)
         world_state = agent_host.getWorldState()
+
         for error in world_state.errors:
             print "Error:", error.text
         if world_state.number_of_observations_since_last_state > 0:
             msg = world_state.observations[-1].text  # Yes, so get the text
             observations = json.loads(msg)  # and parse the JSON
-            print observations[u'ZPos']  # , observations[u'LineOfSight']
+
+            grid = observations.get(u'floorAll', 0)
+            obstacles.append(grid[-1]) # left
+            obstacles.append(grid[-2]) #center
+            obstacles.append(grid[-3]) #rigth
+            print(obstacles)
+            if obstacles[-2] == u'glowstone':
+                agent_host.sendCommand("movewest 1")
+            agent_host.sendCommand("movesouth 0.5")
+        obstacles = []
+
+
+
+
+
+
+
 
 def start_mission(mission, agent_host):
     max_retries = 3  # how many times it tries to start the mission
     num_levels = 2  # how many levels
+
+    #for loop runs the number of missions
     for i in range(num_levels):
         mission = create_level(mission, num_levels, i)
         mission_record = MalmoPython.MissionRecordSpec()
-
+        #tried to start the mission
         for retry in range(max_retries):
             try:
                 agent_host.startMission(mission, mission_record)
@@ -75,8 +98,9 @@ def start_mission(mission, agent_host):
             world_state = agent_host.getWorldState()
             for error in world_state.errors:
                 print "Error:", error.text
-
         print "Mission running ",
+
+
         run_agent(world_state, agent_host)
         print "Mission ended"
         time.sleep(0.5)

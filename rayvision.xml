@@ -35,7 +35,12 @@
     <AgentHandlers>
       <DiscreteMovementCommands/>
       <ObservationFromFullStats/>
-      <ObservationFromRay/>
+        <ObservationFromGrid>
+            <Grid  name="floorAll" >
+                <min x="-1" y="2" z="-1"/>
+                <max x="1" y="2" z="1"/>
+            </Grid>
+        </ObservationFromGrid>
       <RewardForTouchingBlockType>
         <Block reward="-100.0" type="water" behaviour="onceOnly"/>
         <Block reward="-50.0" type="glowstone" behaviour="onceOnly"/>
