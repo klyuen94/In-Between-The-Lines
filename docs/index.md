@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  Home
+title: In Between The Lines 
 ---
 
 _Add your text here_
