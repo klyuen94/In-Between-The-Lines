@@ -15,8 +15,8 @@ Once the data set is generated, we will update this equation with the appropriat
 **Evaluation:**
 We will have two metrics to score the agent: the error rate of object recognition done by the computer vision through a linear regression classifier and the ability of the agent to succeed by finishing the course in optimal time. 
 We will have a standard set of obstacles generated randomly throughout the course, with the more intricate and tough combinations based on the level of difficulty. By having the same sets of obstacles generated at different spots of the map, we can evaluate the obstacle recognition of the agent before it runs the course and determine how well the agent was able to associate a certain action given the obstacles it encounters. In order to do so, we trained a data set by generating continuous screenshots of the map as the agent the agent runs. Below are screenshots of what the agent sees and what we will be using to generate data. 
-
-https://cloud.githubusercontent.com/assets/27802382/26466350/5bce0be4-4143-11e7-9b54-f9ad2dabe76d.png
+![b w_shot](https://cloud.githubusercontent.com/assets/27802382/26466350/5bce0be4-4143-11e7-9b54-f9ad2dabe76d.png)
+![normalshot](https://cloud.githubusercontent.com/assets/27802382/26466353/5fb8909e-4143-11e7-88e2-b72977c25916.png)
 
 With this learner, the agent is able to recognize all the different states of obstacles it encounters. Thus, we are able to evaluate the learner qualitatively by its ability to run smoothly without directly coming contact with the obstacle. 
 The second metric we use to evaluate the agent is its ability to complete the course in optimal time. Despite the agent being able to recognize the different states it encounters and complete the course, it does not necessarily result in the optimal path. In order to verify the agent is taking the best possible path, the levels will be timed. If the agent takes unnecessary steps to the left or right, it will be noted in the resulting time. 
