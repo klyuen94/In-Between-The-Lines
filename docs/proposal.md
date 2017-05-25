@@ -2,7 +2,7 @@
 layout: default
 title: 	Proposal
 ---
-![Alt text](C:\Users\keith\Documents\Spring 2017\CS 175\B&W_shot.png?raw=true "Title")
+
 **Summary:**
 The project will consist of a line runner implemented in minecraft. This means that there will be a course that will be populated with obstacles that the agent has to navigate through. The way we are going to do this by using visual computing. We will train a learner to recognize obstacles using a neural network for classification. The training data will consist of snapshots of the world generated through the malmo API and the target data will consist of actions to be executed by the agent to avoid the obstacles. 
 
