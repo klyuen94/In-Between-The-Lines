@@ -3,32 +3,5 @@ layout: default
 title: In Between The Lines 
 ---
 
-_Add your text here_
+The goal of this project is to have an agent play in a game of Line Runner via Minecraft. The agent is set to learn to play through computer vision. Specifically, the agent will be able to visually compute what actions to make given what it can see as it is running forward on the map. The agent will be tested through various levels of difficulty.
 
-
-What's Markdown (`.md`)?
-
-Markdown is markup that lets you write hypertext (HTML) documents
-in easy-to-read and easy-to-write plain text.
-No angle brackets `<></>` required for
-paragraphs, lists, blockquotes, tables, etc.
-
-
-This is a paragraph (in Markdown). Some more
-text here.
-
-This is another paragraph.
-
-This is a list:
-
-- Orange
-- Apple
-- Blueberry
-
-
-
-Just getting started with Markdown?
-See the [HTML <-> Markdown Quick Reference (Cheat Sheet)][quickref].
-
-
-[quickref]: https://github.com/mundimark/quickrefs/blob/master/HTML.md
