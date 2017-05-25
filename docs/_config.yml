@@ -1,0 +1,15 @@
+###########
+# site.title
+
+title:    'CS-175'
+subtitle: 'CS 175: In Between The Lines'
+
+
+#########################
+# more settings
+
+markdown: kramdown
+
+exclude:
+- README.md
+- LICENSE.md
