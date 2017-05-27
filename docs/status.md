@@ -2,6 +2,7 @@
 layout: default
 title: Status
 ---
+<iframe width="560" height="315" src="https://www.youtube.com/embed/4AWMATiHAAg" frameborder="0" allowfullscreen></iframe>
 **Project Summary:**
 The project consists of a line runner implemented in the environment of minecraft. This means that there will be a straight line course that will be populated with obstacles that the agent has to navigate through skillfully. The agent will be required to completely avoid the obstacles or else it will die and the game will end. The method in which we are going about this is through visual computing. A learner will be trained to recognize obstacles using linear regression for classification. The training data will consist of snapshots of the world generated through the malmo API while the target data will consist of actions to be executed by the agent to avoid the obstacles. Through the use of a linear regression classifer, the agent will be able to consistently recognize the field with its respective obstacles. Additionally, levels of various difficulty will be generated as the agent completes the run. The obstacles will be randomly generated to the respective level of difficulty. 
 
