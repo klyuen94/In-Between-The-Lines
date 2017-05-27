@@ -64,6 +64,7 @@ class QAgent:
         # select an action
         rnd = random.random()
         if rnd < self.epsilon:  # take random action
+            print '\nRANDOM!'
             action = random.randint(0, len(self.actions) - 1)
         else: # take action with highest q value
             m = max(self.q_table[current_state])
@@ -140,6 +141,7 @@ def create_mission():
 
 def create_level(mission, num_levels, level):
     print 'Level %d of %d' % (level + 1, num_levels)
+    level = 1
     if level == 0:
         count = 0
         for x in range(0, 5):
@@ -152,7 +154,7 @@ def create_level(mission, num_levels, level):
     elif level == 1:
         for x in range(0, 5):
             for z in range(5, 198):
-                if random.random() < 0.03 :  # how often to spawn obstacles
+                if random.random() < 0.05 :  # how often to spawn obstacles
                     for y in range(44, 56):
                         mission.drawBlock(x, y, z, 'glowstone')
     return mission
@@ -161,7 +163,7 @@ def create_level(mission, num_levels, level):
 def start_mission(mission, agent_host, agent):
     max_retries = 3  # how many times it tries to start the mission
     num_levels = 1  # how many levels
-    num_repeats = 200  # how many times it repeats each level
+    num_repeats = 500  # how many times it repeats each level
     for i in range(num_levels):
         mission = create_level(mission, num_levels, i)
         mission_record = MalmoPython.MissionRecordSpec()
@@ -199,7 +201,7 @@ def start_mission(mission, agent_host, agent):
 
 def create_agent():
     # epsilon = %chance to take random action, alpha = % of reward agent remembers, gamma = decay rate
-    agent = QAgent(epsilon=0, alpha=0.1, gamma=1.0)
+    agent = QAgent(epsilon=0.03, alpha=0.1, gamma=0.9)
     return agent
 
 
