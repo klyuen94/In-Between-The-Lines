@@ -12,6 +12,7 @@ from PIL import Image
 class OracleStarAgent:
     def __init__(self):
         self.loops = 0
+        self.count = 0
         self.level = []
         self.actions = ['moveeast 1', None, 'movewest 1']
         self.route = []
@@ -147,9 +148,12 @@ class OracleStarAgent:
             self.route.append(self.actions[1])
             self.route_indexes.append(1)
 
-    def save_frame(self, frame, index):
-        filepath = "./desktop/dataset/"
-        image = Image.frombytes('RGBA', (frame.width, frame.height), str(frame.pixels))
+    def save_frame(self, agent_host, world_state, index):
+        while world_state.number_of_video_frames_since_last_state < 1 and world_state.is_mission_running:
+            world_state = agent_host.getWorldState()
+        frame = world_state.video_frames[-1]
+        filepath = "C:/Users/hrvega1510/Desktop/here/"
+        image = Image.frombytes('RGB', (frame.width, frame.height), str(frame.pixels))
         image.save(filepath+str(index)+".png")
 
 
@@ -161,7 +165,8 @@ class OracleStarAgent:
                 return 0
             agent_host.sendCommand('movesouth 1')  # forced move
             time.sleep(.1)
-            self.save_frame(world_state.video_frames[-1], i)
+            self.count = self.count + 1
+            self.save_frame(agent_host, world_state, self.count)
             if self.route[i] is not None:
 
                 agent_host.sendCommand(self.route[i])
@@ -184,6 +189,7 @@ class OracleStarAgent:
         self.grid_to_level(grid)
         path, came_from = self.find_path()
         self.create_route(path, came_from)
+
         self.act(world_state, agent_host)
 
 def create_def_objs():  # Create default Malmo objects:
@@ -271,7 +277,7 @@ def start_mission(mission, agent_host, agent):
 
     print "Done"
     #returns the action list and the frames of video from each discrete time movement of the oracle agent 
-    return agent.route, agent.video
+
 
 def create_agent():
     agent = OracleStarAgent()
