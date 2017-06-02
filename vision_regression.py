@@ -36,11 +36,10 @@ class VisualAgent:
             img = cv2.imread("save.png")
             edges = cv2.Canny(img, 200, 300)
             move = lr.predict(edges.flatten())
+            move = int(move[0])
             if move == 0:
                 agent_host.sendCommand(self.actions[0])
-            elif move == 1:
-                agent_host.sendCommand(self.actions[1])
-            else:
+            elif move == 2:
                 agent_host.sendCommand(self.actions[2])
             time.sleep(.1)
 
@@ -101,10 +100,10 @@ def create_level(mission, num_levels, level):
 def start_mission(mission, agent_host, agent, learner):
     max_retries = 3  # how many times it tries to start the mission
     num_levels = 1  # how many levels
-    num_repeats = 500  # how many times it repeats each level
+    num_repeats = 2  # how many times it repeats each level
 
     for i in range(num_levels):
-        mission = create_level(mission, num_levels, i)
+        mission = create_level(mission, num_levels, 1)
         mission_record = MalmoPython.MissionRecordSpec()
         for repeat in range(num_repeats):
             print repeat + 1, " of ", num_repeats
