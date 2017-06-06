@@ -9,6 +9,7 @@ import oracle
 import train_classifier
 from PIL import Image
 import cv2
+from sklearn.externals import joblib
 class VisualAgent:
     def __init__(self):
 
@@ -137,7 +138,7 @@ def start_mission(mission, agent_host, agent, learner):
     print "Done"
 
 def create_agent():
-    # epsilon = %chance to take random action, alpha = % of reward agent remembers, gamma = decay rate
+
     agent = VisualAgent()
     return agent
 
@@ -147,5 +148,12 @@ if __name__ == '__main__':
     my_agent_host = create_def_objs()
     my_mission = create_mission()
     agent = create_agent()
-    learner = train_classifier.train_classifier()
+    choice = raw_input('input lr for saving a model and ld to load a model: ')
+    print choice
+    if choice == "lr":
+        learner = train_classifier.train_classifier()
+        filename = 'finalized_model.sav'
+        joblib.dump(learner, filename)
+    elif choice == "ld":
+        learner = joblib.load('finalized_model.sav')
     start_mission(my_mission, my_agent_host, agent, learner)
