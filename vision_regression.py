@@ -10,6 +10,8 @@ import train_classifier
 from PIL import Image
 import cv2
 from sklearn.externals import joblib
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 class VisualAgent:
     def __init__(self):
 
@@ -38,10 +40,15 @@ class VisualAgent:
             edges = cv2.Canny(img, 200, 300)
             move = lr.predict(edges.flatten())
             move = int(move[0])
+
             if move == 0:
                 agent_host.sendCommand(self.actions[0])
+                print self.actions[0]
             elif move == 2:
                 agent_host.sendCommand(self.actions[2])
+                print self.actions[2]
+            else:
+                print "movesouth 1"
             time.sleep(.1)
 
     def run(self, agent_host,learner):
@@ -92,7 +99,7 @@ def create_level(mission, num_levels, level):
     elif level == 1:
         for x in range(0, 5):
             for z in range(5, 198):
-                if random.random() < 0.05 :  # how often to spawn obstacles
+                if random.random() < 0.027 :  # how often to spawn obstacles
                     for y in range(44, 56):
                         mission.drawBlock(x, y, z, 'glowstone')
     return mission
@@ -100,8 +107,8 @@ def create_level(mission, num_levels, level):
 
 def start_mission(mission, agent_host, agent, learner):
     max_retries = 3  # how many times it tries to start the mission
-    num_levels = 1  # how many levels
-    num_repeats = 2  # how many times it repeats each level
+    num_levels = 4  # how many levels
+    num_repeats = 1  # how many times it repeats each level
 
     for i in range(num_levels):
         mission = create_level(mission, num_levels, 1)
@@ -149,11 +156,10 @@ if __name__ == '__main__':
     my_mission = create_mission()
     agent = create_agent()
     choice = raw_input('input lr for saving a model and ld to load a model: ')
-    print choice
     if choice == "lr":
         learner = train_classifier.train_classifier()
-        filename = 'finalized_model.sav'
+        filename = 'finalized_model_10.sav'
         joblib.dump(learner, filename)
     elif choice == "ld":
-        learner = joblib.load('finalized_model.sav')
+        learner = joblib.load('finalized_model_10.sav')
     start_mission(my_mission, my_agent_host, agent, learner)
