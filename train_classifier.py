@@ -19,6 +19,8 @@ def train_classifier():
         y_train = np.array([])
         img = cv2.imread(filename + str(0) + ".png")
         edges = cv2.Canny(img, 200, 300)
+        edges = edges[80:160,72:360]
+        print edges.shape
         x_train = edges.flatten()
         for rows in reader:
             print "adding " + str(count)
@@ -29,11 +31,10 @@ def train_classifier():
             for i in range(count*(size),size*(count+1)):
                 if i != 0:
                     img = cv2.imread(filename+str(i)+".png")
-                    edges = cv2.Canny(img, 200, 300).flatten()
-                    x_train = np.vstack((x_train,edges))
+                    edges = cv2.Canny(img, 200, 300)
+                    edges = edges[80:160,72:360]
+                    x_train = np.vstack((x_train,edges.flatten()))
             count = count + 1
-    print x_train.shape
-    print y_train.shape
     lr.fit(x_train, y_train)
     f.close()
     return lr
