@@ -4,6 +4,8 @@ title: Final Report
 ---
 
 Project Summary: The project consists of a line runner implemented in the environment of minecraft. This means that there will be a straight line course that will be populated with obstacles that the agent has to navigate through skillfully. The agent will be required to completely avoid the obstacles or else the game will end. The method in which we are going about this is through visual learning. The training data will consist of snapshots of the world generated through an agent with complete course knowledge using a path finding algorithm while the target data will consist of the actions to be executed by this agent to avoid the obstacles. Through the use of a decision tree classifier, the agent will be able to consistently recognize the field with its respective obstacles by using edge detection to generalize obstacles. Additionally, levels of various difficulty will be generated as the agent completes the run, some of which will be randomly generated to the respective level of difficulty.
+
+Below is an image of the three different levels we created in a birds eye view. The first level is where the glowstones are most sparce, the second is where the glowstones are more populated, and the final level is where there is a full row of glowstones with only one opening (only one accurate move available) every 15 steps.
 ![levels](https://user-images.githubusercontent.com/27802382/27006751-6fd20e0a-4df1-11e7-819c-8b929e2ee7ad.png)
  
  
@@ -94,7 +96,8 @@ Once trained, we used the predict function in the decision tree library in the a
 	
  
 Evaluation: In order to evaluate the effectiveness of visual agents we’ve created three additional agents to compare it against. All of the agents will be compared by the number of actions they are able to take while the level is running which is also how far into the level they manage to get. The random agent serves as an absolute minimum as to what the visual agent should be able to do. If the visual agent is unable to traverse further than the random agent we will know something is wrong. The qlearning agent is representative of a basic learning algorithm; something that is much easier to implement than the visual learner. If the visual agent could not do better than this agent that would be disappointing, but a good lesson on working smarter rather than harder. Finally, the oracle agent is used to train the agent is is able to complete the level perfectly every time, so it’s less of a basis for comparison and more a training tool, but being able to match it would be incredible. 
- 
+
+Below are three graphs, one for each level of the game, that display the performance of each agent.  
 ![graphs](https://user-images.githubusercontent.com/27802382/27006750-6c516f82-4df1-11e7-928e-22c070ab6b98.png)
  
 We’re very pleased with our final results and having no idea what they would be going in, it’s pretty surprising that it was able to do so well.  
