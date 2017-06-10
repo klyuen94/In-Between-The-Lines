@@ -5,8 +5,9 @@ import os
 import random
 import sys
 import time
+import csv
 import Queue
-
+from PIL import Image
 
 class OracleStarAgent:
     def __init__(self):
@@ -14,6 +15,14 @@ class OracleStarAgent:
         self.level = []
         self.actions = ['moveeast 1', None, 'movewest 1']
         self.route = []
+        self.route_indexes = []
+        self.data_i = 0
+
+    def clear(self):
+        self.loops = 0
+        self.level = []
+        self.route = []
+        self.route_indexes = []
 
     def grid_to_level(self, grid):
         line = []
@@ -51,14 +60,13 @@ class OracleStarAgent:
 
     def heuristic(self, coor, sum, d):
         sum +=  len(self.neighbors(coor))
-        if d == 1:
+        if d == 3:  # choose maximum depth
             return sum
         for n in self.neighbors(coor):
             sum += self.heuristic(n, sum, d+1)
         return sum
 
     def find_path(self):
-        print 'Finding Path...'
         ag_x = 2
         ag_z = 0
         came_from = {}
@@ -87,12 +95,12 @@ class OracleStarAgent:
 
         return score_from, came_from
 
-    def clean_path(self, path, came_from):
+    def clean_path(self, path):
         current = (0,2)
         clean = []
         winner = ()
         for next in sorted(path.keys()):
-            print next, path[next]
+            #print next, path[next]
             if next[0] == 0:
                 clean.append(next)
                 previous = next
@@ -121,26 +129,43 @@ class OracleStarAgent:
                         max = -1
                         winner = ()
                 current = next
-
         return clean
 
     def create_route(self, path, came_from):
         current = (0,2)
-        path = self.clean_path(path, came_from)
+        path = self.clean_path(path)
         for next in path:
             if next[0] == 0:
                 continue
             if next[1] == current[1]:
                 self.route.append(self.actions[1])
+                self.route_indexes.append(1)
             elif next[1] < current[1]:
                 self.route.append(self.actions[2])
+                self.route_indexes.append(2)
             else:
                 self.route.append(self.actions[0])
+                self.route_indexes.append(0)
             current = next
-        for i in range(1,3):
+        for i in range(1,5):
             self.route.append(self.actions[1])
+            self.route_indexes.append(1)
 
-    def act(self, world_state, agent_host):
+    def save_actions(self):
+        with open('D:\\CS175Dataset\\actions.csv', 'ab') as myfile:
+            wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+            wr.writerow(self.route_indexes)
+
+    def save_frame(self, agent_host, world_state):
+        while world_state.number_of_video_frames_since_last_state < 1 and world_state.is_mission_running:
+            world_state = agent_host.getWorldState()
+        filepath = 'D:\\CS175Dataset\\Images\\'
+        frame = world_state.video_frames[-1]
+        image = Image.frombytes('RGB', (frame.width, frame.height), str(frame.pixels))
+        image.save(filepath + str(self.data_i) + '.png')
+
+
+    def act(self, mission, agent_host):
         for i in range(len(self.route)):  # main loop
             self.loops += 1
             world_state = self.update_state(agent_host)
@@ -148,12 +173,14 @@ class OracleStarAgent:
                 return 0
             agent_host.sendCommand('movesouth 1')  # forced move
             time.sleep(.1)
-            #take screenshot
+            self.save_frame(agent_host,world_state)  # take picture
+            time.sleep(.2)
             if self.route[i] is not None:
                 agent_host.sendCommand(self.route[i])
                 time.sleep(.1)
+            self.data_i += 1
 
-    def run(self, agent_host):
+    def get_grid(self, agent_host):
         world_state = self.update_state(agent_host)
         if world_state.number_of_observations_since_last_state > 0:  # If we get an observation, make the observation
             msg = world_state.observations[-1].text
@@ -162,11 +189,27 @@ class OracleStarAgent:
         else:
             print "Didn't get observation!"
             return 0
+        return grid
 
+    def run(self, mission, agent_host):
+        grid = self.get_grid(agent_host)
+        if grid == 0:
+            return 0
         self.grid_to_level(grid)
         path, came_from = self.find_path()
         self.create_route(path, came_from)
-        self.act(world_state, agent_host)
+        time.sleep(8)
+        self.save_actions()
+        self.act(mission, agent_host)
+
+    def test_level(self, mission, agent_host):
+        grid = self.get_grid(agent_host)
+        if grid == 0:
+            return False
+        self.grid_to_level(grid)
+        path, came_from = self.find_path()
+        self.create_route(path, came_from)
+        return len(self.route) == 199
 
 def create_def_objs():  # Create default Malmo objects:
     agent_host = MalmoPython.AgentHost()
@@ -189,22 +232,32 @@ def create_mission():
         my_mission = MalmoPython.MissionSpec(mission_xml, True)
         return my_mission
 
+def check_level(mission, agent_host):
+    tester = OracleStarAgent()
+    return tester.test_level(mission, agent_host)
 
 def create_level(mission, num_levels, level):
     print 'Level %d of %d' % (level + 1, num_levels)
-    level = 2
+    if level < 10:
+        level = 0
+    elif level < 20:
+        level = 1
+    else:
+        level = 2
+
     if level == 0:
-        for z in range(2,195):
-            if z == 4:
-                rnd = random.randint(0,4)
-                for x in range(0,5):
-                    if x != 0:
-                        mission.drawCuboid(x, 44, z, x, 56, z, 'glowstone')
+        count = 0
+        for x in range(0, 5):
+            for z in range(5, 198):
+                if count % 17 == 0:
+                    for y in range(44, 56):
+                        mission.drawBlock(x, y, z, 'glowstone')
+                count += 1
 
     elif level == 1:
         for x in range(0, 5):
             for z in range(5, 195):
-                if random.random() < 0.05 :  # how often to spawn obstacles
+                if random.random() < 0.027 :  # how often to spawn obstacles
                     for y in range(44, 56):
                         mission.drawBlock(x, y, z, 'glowstone')
 
@@ -216,14 +269,14 @@ def create_level(mission, num_levels, level):
                     if x != rnd:
                         mission.drawCuboid(x, 44, z, x, 56, z, 'glowstone')
 
-    return mission
-
-
-def start_mission(mission, agent_host, agent):
-    max_retries = 3  # how many times it tries to start the mission
-    num_levels = 1  # how many levels
-    for i in range(num_levels):
-        mission = create_level(mission, num_levels, i)
+def start_mission(agent_host, agent):
+    max_retries = 5  # how many times it tries to start the mission
+    num_levels = 30  # how many levels
+    reset = False    # generated impossible level
+    i = 0
+    while i < num_levels:
+        mission = create_mission()
+        create_level(mission, num_levels, i)
         mission_record = MalmoPython.MissionRecordSpec()
         for retry in range(max_retries):
             try:
@@ -234,7 +287,7 @@ def start_mission(mission, agent_host, agent):
                     print "Error starting mission:", e
                     exit(1)
                 else:
-                    time.sleep(1)
+                    time.sleep(2)
 
         print "Waiting for the mission to start ",
         world_state = agent_host.getWorldState()
@@ -245,11 +298,22 @@ def start_mission(mission, agent_host, agent):
             for error in world_state.errors:
                 print "Error:", error.text
 
+        print "Checking Level"
+        if not check_level(mission, agent_host):
+            print "Unsolvable\n"
+            agent_host.sendCommand('quit')
+            continue
+
         print "Mission running\n",
-        agent.run(agent_host)
+        agent.run(mission, agent_host)
         print "Traveled:", agent.loops
+        if agent.loops != 199:
+            print 'BAD'
+            break
+        agent.clear()
         print "Mission ended\n"
         time.sleep(1)
+        i += 1
 
     print "Done"
 
@@ -260,9 +324,8 @@ def create_agent():
 if __name__ == '__main__':
     sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
     my_agent_host = create_def_objs()
-    my_mission = create_mission()
     agent = create_agent()
-    start_mission(my_mission, my_agent_host, agent)
+    start_mission(my_agent_host, agent)
 
 
 

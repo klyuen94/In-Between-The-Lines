@@ -24,23 +24,22 @@
         <DrawCuboid x1="0"  y1="45" z1="200" x2="4" y2="55" z2="200" type="lapis_block" />     <!-- the destination marker -->
         <DrawBlock x="2"  y="45" z="1" type="cobblestone" />    <!-- the starting marker -->
       </DrawingDecorator>
-      <ServerQuitFromTimeUp timeLimitMs="30000"/>
       <ServerQuitWhenAnyAgentFinishes/>
     </ServerHandlers>
   </ServerSection>
 
-  <AgentSection mode="Survival">
+  <AgentSection mode="Creative">
     <Name>Hans</Name>
     <AgentStart>
       <Placement x="2.5" y="46.0" z="1.5" pitch="0" yaw="0"/>
     </AgentStart>
     <AgentHandlers>
+      <DiscreteMovementCommands/>
+      <MissionQuitCommands/>
       <VideoProducer want_depth="false">
         <Width>432</Width>
         <Height>240</Height>
       </VideoProducer>
-      <DiscreteMovementCommands/>
-      <ObservationFromRay/>
       <ObservationFromGrid>
         <Grid  name="levelAll" >
           <min x="-2" y="-1" z="1"/>

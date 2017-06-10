@@ -163,7 +163,7 @@ def create_level(mission, num_levels, level):
 def start_mission(mission, agent_host, agent):
     max_retries = 3  # how many times it tries to start the mission
     num_levels = 1  # how many levels
-    num_repeats = 500  # how many times it repeats each level
+    num_repeats = 200  # how many times it repeats each level
     for i in range(num_levels):
         mission = create_level(mission, num_levels, i)
         mission_record = MalmoPython.MissionRecordSpec()

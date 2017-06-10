@@ -2,11 +2,12 @@
 <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <About>
-    <Summary>Test for creating line runner map</Summary>
+    <Summary>GO!</Summary>
   </About>
 
   <ServerSection>
     <ServerInitialConditions>
+      <Weather>clear</Weather>
         <Time>
           <StartTime>1</StartTime>
           <AllowPassageOfTime>false</AllowPassageOfTime>
@@ -43,8 +44,8 @@
         </Grid>
       </ObservationFromGrid>
       <RewardForTouchingBlockType>
-        <Block reward="-100.0" type="water" behaviour="onceOnly"/>
-        <Block reward="-50.0" type="glowstone" behaviour="onceOnly"/>
+        <Block reward="-100.0" type="stone" behaviour="onceOnly"/>
+        <Block reward="-100.0" type="glowstone" behaviour="onceOnly"/>
         <Block reward="100.0" type="lapis_block" behaviour="onceOnly"/>
       </RewardForTouchingBlockType>
       <RewardForSendingCommand reward="0" />
