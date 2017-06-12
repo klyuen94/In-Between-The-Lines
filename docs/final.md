@@ -16,13 +16,13 @@ Approaches: On our project we created several agents in the process of developin
 	
 Random Agent: This agent is our baseline and simply works by choosing one of the 3 directions with a .33 random probability of choosing each move. Beyond that, it chooses not to run into the walls of the level that end the game, but will happily run into the normal obstacles. This is our worst agent and is only used to compare against the other agents that we implemented. It serves to prove that our other agents are acting intelligently rather than just being random behavior.  Pseudo code looks as follows: 
  
-lr = random()
-if lr >= .66666:
-	agent_host.sendCommand(“moveast 1”)
-elif lr >=.33333:
-	agent_host.sendCommand(“movesouth 1”)
-else:
-	agent_host.sendCommand(“movewest 1”)
+	lr = random()
+	if lr >= .66666:
+		agent_host.sendCommand(“moveast 1”)
+	elif lr >=.33333:
+		agent_host.sendCommand(“movesouth 1”)
+	else:
+		agent_host.sendCommand(“movewest 1”)
  
 Q-learning: This is our first approach for the original visual learner. We wanted to combine the q-learning algorithm from homework 2 and use visual input rather than use the grid for observations. This meant that we wanted to be able to input an image to the agent and produce a prediction based on that input. Our q-learner however, does not do this but rather uses grid observations and ray observations to do the reinforcement learning. We used this as a placeholder until we figured out how to process the images in a way that were usable for the visual agent and as a means of comparing the visual agent to a basic learning algorithm. 
  
@@ -57,18 +57,18 @@ In our q-learning agent, we used a greedy policy to determine the actions of the
  
 A* Oracle: This agent works by first getting a grid for the entire level and then turns that grid into a two dimensional array which is used to find a path through the level using the A* algorithm using a heuristic that evaluates the number of neighbors each neighbor has. The pseudocode is as follows:
  
-While not frontier.empty():
-	Current = frontier.get()
-	If agent is at end of level:
-		Break
-	For next in current.neighbors():
-		If cost to next is less than current cost:
-			Current cost = next cost
-			Score = heuristic(next)
-			If score != 0:
-				frontier.put(next, score)
-				path.add(next)
-Return path
+	While not frontier.empty():
+		Current = frontier.get()
+		If agent is at end of level:
+			Break
+		For next in current.neighbors():
+			If cost to next is less than current cost:
+				Current cost = next cost
+				Score = heuristic(next)
+				If score != 0:
+					frontier.put(next, score)
+					path.add(next)
+	Return path
  
 After this happens we’re left with all the possible solutions to the level and the score associated with each path. Another function chooses the best path and ensures that the agent is solving the level properly, and from there builds a list of the necessary actions. Finally, the agent follows the actions in the list and traverses the level while taking screenshots of what it’s doing for use with the visual agent. 
  
@@ -76,9 +76,8 @@ Visual Agent: The visual agent is the final agent that we implemented. We used a
  
 How it works: First, we used the oracle agent to run 50 times for every level we had. That meant that we had a total of 150 runs of which each consisted of 199 images and 199 decisions. This meant that we had 29,850 images to train from. The way we trained the agent was by creating a x_train and the a y_train to feed to the decision tree. However, the hardest part was determining how we would collect images from the malmo API. We did that by using the following code: 
  
-frame	= world_state.video_frame[-1]
-
-image	= Image.frombytes(‘RGB’, (frame.width, frame.height), str(frame.pixels))
+	frame	= world_state.video_frame[-1]
+	image	= Image.frombytes(‘RGB’, (frame.width, frame.height), str(frame.pixels))
  
 Essentially that converted the byte array into a png file that we can use in the openCV library to do the edge detection. Also, that allows us to save it in  folder to use as a training data set in the learner. 
 	
