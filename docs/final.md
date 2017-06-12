@@ -85,6 +85,7 @@ Visual Agent: The visual agent is the final agent that we implemented. We used a
 How it works: First, we used the oracle agent to run 50 times for every level we had. That meant that we had a total of 150 runs of which each consisted of 199 images and 199 decisions. This meant that we had 29,850 images to train from. The way we trained the agent was by creating a x_train and the a y_train to feed to the decision tree. However, the hardest part was determining how we would collect images from the malmo API. We did that by using the following code: 
  
 frame	= world_state.video_frame[-1]
+
 image	= Image.frombytes(‘RGB’, (frame.width, frame.height), str(frame.pixels))
  
 Essentially that converted the byte array into a png file that we can use in the openCV library to do the edge detection. Also, that allows us to save it in  folder to use as a training data set in the learner. 
