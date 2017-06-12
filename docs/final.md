@@ -42,15 +42,6 @@ In our q-learning agent, we used a greedy policy to determine the actions of the
 		choose = random(0, # of item in tiebreak)
 		action = tiebreak[choose]
  
-	Figure 1: 
- 
-Block : 4 blocks possible
-Block : 4 blocks possible 
-Block : 4 blocks possible 
-Block: 3 blocks possible
-Ray observation : 3 blocks possible
-Block: 3 blocks possible
- 
  
  
  
